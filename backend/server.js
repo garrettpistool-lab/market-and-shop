@@ -86,7 +86,7 @@ function initializeDatabase() {
       role TEXT NOT NULL CHECK(role IN ('admin', 'vendor', 'customer', 'guest')),
       vendor_id INTEGER,
       avatar TEXT,
-      password TEXT DEFAULT 'demo123',
+      password TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       two_factor_enabled INTEGER DEFAULT 0,
       two_factor_secret TEXT

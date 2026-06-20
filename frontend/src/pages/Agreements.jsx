@@ -5,7 +5,7 @@ export default function Agreements() {
     <div className="max-w-4xl mx-auto">
       <h1 className="text-4xl font-bold tracking-tight mb-8">Terms of Service, Privacy Policy &amp; User Agreements</h1>
 
-      <p className="text-sm text-gray-500 mb-6">Effective: June 15, 2026. These documents may be updated at any time. Continued use of Market and Shop means you accept the current versions. Please read carefully.</p>
+      <p className="text-sm text-gray-500 mb-6">These documents may be updated at any time. Continued use of Market and Shop means you accept the current versions. Please read carefully.</p>
 
       {/* TERMS OF SERVICE - Page 1 content */}
       <div className="mb-10">

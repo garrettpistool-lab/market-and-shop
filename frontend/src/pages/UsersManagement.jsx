@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import { filterProductionUsers } from '../lib/config';
+
 
 export default function AdminPortal({ user }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,14 +41,14 @@ export default function AdminPortal({ user }) {
     const mData = mRes.data || [];
     const pData = pRes.data || [];
 
-    setUsers(filterProductionUsers(uData));
+    setUsers(uData);
     setVendors(vData);
     setOrders(oData);
     setMenuItems(mData);
     setProduceItems(pData);
 
     setAnalytics({
-      totalUsers: filterProductionUsers(uData).length,
+      totalUsers: uData.length,
       totalVendors: vData.length,
       totalOrders: oData.length,
       pendingVendors: vData.filter(v => v.status === 'pending').length,

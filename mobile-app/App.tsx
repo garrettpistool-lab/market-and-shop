@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with real
-const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with real
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = supabaseUrl && supabaseAnonKey
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
@@ -14,30 +16,34 @@ export default function App() {
   const [screen, setScreen] = useState<'login' | 'market' | 'profile'>('login');
 
   useEffect(() => {
-    if (user) {
+    if (user && supabase) {
       loadMenu();
     }
   }, [user]);
 
   const loadMenu = async () => {
+    if (!supabase) return;
     const { data } = await supabase.from('menu_items').select('*');
     setMenuItems(data || []);
   };
 
   const login = async () => {
-    // Query Supabase for profile after auth (no demo/fake data)
-    const { data: users } = await supabase
+    if (!supabase) {
+      alert('Configure EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY.');
+      return;
+    }
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error || !data.user) {
+      alert(error?.message || 'Sign in failed.');
+      return;
+    }
+    const { data: profile } = await supabase
       .from('users')
       .select('*')
       .eq('email', email)
       .single();
-
-    if (users && users.password === password) {
-      setUser(users);
-      setScreen('market');
-    } else {
-      alert('Invalid credentials. Use a test account you created in Supabase Auth.');
-    }
+    setUser(profile || data.user);
+    setScreen('market');
   };
 
   const logout = () => {
@@ -48,12 +54,13 @@ export default function App() {
   if (screen === 'login') {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Market and Shop Mobile</Text>
+        <Text style={styles.title}>Market and Shop</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email (admin@example.com)"
+          placeholder="Email"
           value={email}
           onChangeText={setEmail}
+          autoCapitalize="none"
         />
         <TextInput
           style={styles.input}
@@ -62,61 +69,33 @@ export default function App() {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <Button title="Login" onPress={login} />
-        <Text style={{marginTop: 20, color: '#666'}}>Sign in with your Market and Shop account.</Text>
+        <Button title="Sign in" onPress={login} />
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Market and Shop - {user?.role}</Text>
-        <Button title="Logout" onPress={logout} />
-      </View>
-
-      {screen === 'market' && (
-        <>
-          <Text style={styles.section}>Marketplace</Text>
-          <FlatList
-            data={menuItems}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.item}>
-                <Text>{item.name} - ${item.price}</Text>
-                <Text style={{color: '#666'}}>{item.description}</Text>
-              </View>
-            )}
-          />
-          <View style={styles.nav}>
-            <Button title="Market" onPress={() => setScreen('market')} />
-            <Button title="Profile" onPress={() => setScreen('profile')} />
+      <Text style={styles.title}>Market and Shop</Text>
+      <Button title="Sign out" onPress={logout} />
+      <FlatList
+        data={menuItems}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <Text>${item.price}</Text>
           </View>
-        </>
-      )}
-
-      {screen === 'profile' && (
-        <>
-          <Text style={styles.section}>Profile</Text>
-          <Text>Welcome, {user?.name} ({user?.role})</Text>
-          <Text>Email: {user?.email}</Text>
-          {user?.role === 'admin' && <Text style={{color: 'green'}}>Full admin control enabled!</Text>}
-          <View style={styles.nav}>
-            <Button title="Market" onPress={() => setScreen('market')} />
-            <Button title="Profile" onPress={() => setScreen('profile')} />
-          </View>
-        </>
-      )}
+        )}
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#fff' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20 },
-  section: { fontSize: 20, fontWeight: '600', marginVertical: 10 },
-  input: { borderWidth: 1, padding: 10, marginVertical: 5, borderRadius: 8 },
-  item: { padding: 15, borderBottomWidth: 1, borderColor: '#eee' },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  nav: { flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, paddingTop: 10, borderTopWidth: 1 },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, color: '#083a9b' },
+  input: { borderWidth: 1, borderColor: '#ccc', padding: 12, marginBottom: 12, borderRadius: 8 },
+  card: { padding: 12, borderBottomWidth: 1, borderColor: '#eee' },
+  itemName: { fontWeight: '600' },
 });

@@ -21,7 +21,7 @@ npx supabase functions deploy notify-low-rating
 Set secrets:
 
 ```bash
-npx supabase secrets set APP_URL=https://your-app.vercel.app
+npx supabase secrets set APP_URL=https://your-production-domain.com
 npx supabase secrets set NOTIFY_FROM_EMAIL="Market and Shop <noreply@yourdomain.com>"
 npx supabase secrets set RESEND_API_KEY=re_your_resend_key
 ```

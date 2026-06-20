@@ -2,7 +2,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const NOTIFY_FROM = Deno.env.get("NOTIFY_FROM_EMAIL") || "Market and Shop <onboarding@resend.dev>";
-const APP_URL = Deno.env.get("APP_URL") || "https://your-app.vercel.app";
+const APP_URL = Deno.env.get("APP_URL") || "";
 
 interface Payload {
   review_id: number;
@@ -59,7 +59,7 @@ Deno.serve(async (req: Request) => {
               ${escapeHtml(comment || "(no comment)")}
             </blockquote>
             <p>You have until <strong>${deadline}</strong> to make it right in your
-            <a href="${APP_URL}/vendor-dashboard">Vendor Dashboard</a>. If unresolved, the review may be published publicly.</p>
+            <a href="${APP_URL ? `${APP_URL}/vendor-dashboard` : "/vendor-dashboard"}">Vendor Dashboard</a>. If unresolved, the review may be published publicly.</p>
             <p style="font-size:12px;color:#888">Market and Shop • Local Vendor Marketplace</p>
           </div>
         `,

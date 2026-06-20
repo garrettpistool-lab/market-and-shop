@@ -13,9 +13,7 @@ export function isAuth0Configured() {
   return !!(getAuth0Domain() && getAuth0ClientId());
 }
 
-const DEFAULT_APP_URL = 'https://your-app.vercel.app';
-
-/** Vercel Auth0 integration provisions Next.js-style `/api/auth/callback` URLs. */
+/** Auth0 callback path (SPA on Vercel typically uses /api/auth/callback). */
 export function getAuth0CallbackPath() {
   return (import.meta.env.VITE_AUTH0_CALLBACK_PATH || '/api/auth/callback').trim();
 }
@@ -24,7 +22,7 @@ export function getAuth0RedirectUri() {
   const base =
     typeof window !== 'undefined'
       ? window.location.origin
-      : (import.meta.env.VITE_APP_URL || DEFAULT_APP_URL).replace(/\/$/, '');
+      : (import.meta.env.VITE_APP_URL || '').replace(/\/$/, '');
   const path = getAuth0CallbackPath();
   return `${base}${path.startsWith('/') ? path : `/${path}`}`;
 }

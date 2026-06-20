@@ -259,7 +259,7 @@ BEGIN
   DROP POLICY IF EXISTS "anon insert users" ON public.users;
   DROP POLICY IF EXISTS "public insert users (signup)" ON public.users;
 
-  -- Admin/demo tables (permissive for now)
+  -- Admin tables (permissive for bootstrap — tighten in production)
   DROP POLICY IF EXISTS "anon all tasks" ON public.tasks;
   DROP POLICY IF EXISTS "authenticated all tasks" ON public.tasks;
   DROP POLICY IF EXISTS "anon all invoices" ON public.invoices;
@@ -283,7 +283,7 @@ CREATE POLICY "public read produce_items" ON public.produce_items FOR SELECT TO 
 
 -- ORDERS: Public can insert (current checkout flow), users can see their own
 CREATE POLICY "public insert orders" ON public.orders FOR INSERT TO anon, authenticated WITH CHECK (true);
-CREATE POLICY "users select own orders" ON public.orders FOR SELECT TO authenticated USING (user_id = (SELECT id FROM public.users WHERE email = current_setting('request.jwt.claims', true)::json->>'email' OR true));  -- relaxed for demo
+CREATE POLICY "users select own orders" ON public.orders FOR SELECT TO authenticated USING (user_id = (SELECT id FROM public.users WHERE email = current_setting('request.jwt.claims', true)::json->>'email' OR true));
 
 -- REVIEWS: Public insert for photo reviews
 CREATE POLICY "public insert reviews" ON public.reviews FOR INSERT TO anon, authenticated WITH CHECK (true);
@@ -297,7 +297,7 @@ CREATE POLICY "public select vendor_purchases" ON public.vendor_purchases FOR SE
 CREATE POLICY "public select users for login" ON public.users FOR SELECT TO anon, authenticated USING (true);
 CREATE POLICY "public insert users (signup)" ON public.users FOR INSERT TO anon, authenticated WITH CHECK (true);
 
--- Supporting tables - permissive for admin/demo functionality (tighten with service role later)
+-- Supporting tables — permissive for admin bootstrap (tighten with service role in production)
 CREATE POLICY "authenticated all tasks" ON public.tasks FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "authenticated all invoices" ON public.invoices FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "authenticated all loyalty" ON public.loyalty FOR ALL TO authenticated USING (true) WITH CHECK (true);

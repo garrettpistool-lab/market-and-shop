@@ -112,7 +112,7 @@ function CustomerHome({ liveStats }) {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.65)_82%)]"></div>
 
         <div className="relative z-10 flex-1 max-w-[620px]">
-          <div className="inline-flex items-center gap-2 mb-5 text-[10px] tracking-[3.5px] font-mono border border-white/25 px-5 py-1 rounded-full bg-white/5">EST. JUNE 15, 2026 • DIRECT • NO MIDDLEMEN</div>
+          <div className="inline-flex items-center gap-2 mb-5 text-[10px] tracking-[3.5px] font-mono border border-white/25 px-5 py-1 rounded-full bg-white/5">MARKET AND SHOP • DIRECT • NO MIDDLEMEN</div>
           
           <h1 className="text-[68px] md:text-[92px] leading-[0.86] font-semibold tracking-[-6.4px] mb-6 drop-shadow-sm">
             Real food.<br />Real people.<br />Real impact.

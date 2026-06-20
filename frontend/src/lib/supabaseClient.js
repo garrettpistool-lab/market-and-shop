@@ -12,8 +12,8 @@ if (!supabaseUrl || !supabaseKey) {
 }
 
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseKey || 'placeholder-key',
+  supabaseUrl || 'https://your-project.supabase.co',
+  supabaseKey || 'your-anon-key',
   {
     auth: {
       persistSession: true,

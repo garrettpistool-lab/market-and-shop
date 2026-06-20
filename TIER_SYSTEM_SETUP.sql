@@ -27,11 +27,6 @@ BEGIN
   END IF;
 END $$;
 
--- Test vendor on paid plan for storefront demo (optional)
-UPDATE public.vendors SET plan = 'paid', slogan = 'Fresh local flavors, made with care.'
-WHERE email ILIKE 'vendor@example.com'
-   OR name ILIKE '%test vendor%';
-
 -- -----------------------------------------------------------------
 -- 2. Customer plan & delivery link columns
 -- -----------------------------------------------------------------
