@@ -1,0 +1,16 @@
+{
+  "name": "Market and Shop - Local Vendor Marketplace",
+  "short_name": "Market and Shop",
+  "description": "Fresh food, produce, and local vendors. Order, share, and support your community.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#083a9b",
+  "icons": [
+    {
+      "src": "https://i.pravatar.cc/192?img=47",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

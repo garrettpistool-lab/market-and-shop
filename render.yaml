@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: market-and-shop-backend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        sync: false  # Set this to your frontend URL after frontend deploy (e.g. https://market-and-shop-frontend-xxx.onrender.com or Vercel)
+    # For SQLite persistence on free: In Render dashboard add a Disk (1GB) mounted at /data
+    # Then edit server.js dbPath = process.env.RENDER ? '/data/marketshop.db' : path.join(__dirname, 'marketshop.db')
+    # Better long-term (free): switch to Supabase Postgres or Render Postgres free tier + update queries minimally.
+    # Security: CORS locked via FRONTEND_URL, rate limits + helmet active. 2FA enforced.

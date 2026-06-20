@@ -1,0 +1,4 @@
+project_id = "your-project-ref"
+
+[functions.notify-low-rating]
+verify_jwt = false

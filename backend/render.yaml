@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: market-and-shop-backend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        sync: false  # Set this to your frontend URL after frontend deploy (e.g. https://market-and-shop-frontend-xxx.onrender.com)
+    autoDeploy: true
